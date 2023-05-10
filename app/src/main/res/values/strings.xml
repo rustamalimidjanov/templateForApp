@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">templateForApp</string>
+    <string name="crime_title_hint">Enter a title for the crime</string>
+    <string name="crime_title_label">Title</string>
+    <string name="crime_details_label">Details</string>
+    <string name="crime_solved_label">Solved</string>
+    <string name="crime_title">Crime Title</string>
+    <string name="crime_title_police">Crime Title!!</string>
+    <string name="crime_date">Crime Date</string>
+    <string name="crime_date_police">Crime Date!!</string>
+    <string name="crime_button">Requires Police</string>
+    <string name="crime_button_police">Requires Police</string>
+    <string name="new_crime">New Crime</string>
+    <string name="empty_text">This is empty layout, click to add new crime</string>
+    <string name="empty_button">Click me</string>
+    <string name="add_crime">add crime</string>
+    <string name="choose">CHOOSE SUSPECT</string>
+    <string name="send_report_Text">SEND CRIME REPORT</string>
+    <string name="crime_report">%1$s! The Crime was discovered on %2$s. %3$s, and %4$s</string>
+    <string name="crime_report_solved">The case is solved</string>
+    <string name="crime_report_unsolved">The case is not solved</string>
+    <string name="crime_report_no_suspect">there is no suspect</string>
+    <string name="crime_report_suspect">the suspect is %s.</string>
+    <string name="crime_report_subject">CriminalIntent Crime Report</string>
+    <string name="send_report">Send crime report via</string>
+    <string name="crime_report_photo">Send photo</string>
+</resources>
