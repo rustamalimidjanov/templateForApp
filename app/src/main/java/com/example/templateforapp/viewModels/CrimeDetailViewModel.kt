@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import java.util.UUID
 
@@ -19,6 +20,14 @@ class CrimeDetailViewModel(
     init {
         viewModelScope.launch {
             _crime.value = crimeRepository.getCrime(id = crimeId)
+        }
+    }
+
+    fun updateCrime(onUpdate: (Crime) -> Crime) {
+        _crime.update { oldCrime ->
+            oldCrime?.let {
+                onUpdate(it)
+            }
         }
     }
 }

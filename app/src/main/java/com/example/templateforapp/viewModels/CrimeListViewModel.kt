@@ -1,17 +1,14 @@
-package com.example.templateforapp
+package com.example.templateforapp.viewModels
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import kotlinx.coroutines.delay
+import com.example.templateforapp.Crime
+import com.example.templateforapp.CrimeRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
-import java.util.*
 
-private const val TAG = "CrimeListViewModel"
 class CrimeListViewModel: ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     private val _crimes: MutableStateFlow<List<Crime>> = MutableStateFlow(emptyList())

@@ -1,7 +1,6 @@
 package com.example.templateforapp
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,8 +12,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.templateforapp.databinding.FragmentCrimeListBinding
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.flow.collect
+import com.example.templateforapp.viewModels.CrimeListViewModel
 import kotlinx.coroutines.launch
 
 
