@@ -19,6 +19,7 @@ class CrimeListViewModel: ViewModel() {
         viewModelScope.launch {
             crimeRepository.getCrimes().collect() {
                 _crimes.value = it
+                    //test
             }
         }
     }
