@@ -30,6 +30,16 @@ class CrimeDetailViewModel(
             }
         }
     }
+
+    override fun onCleared() {
+        super.onCleared()
+            crime.value?.let {
+                crimeRepository.updateCrime(it)
+            }
+    }
+
+
+
 }
 
 class CrimeDetailViewModelFactory(
