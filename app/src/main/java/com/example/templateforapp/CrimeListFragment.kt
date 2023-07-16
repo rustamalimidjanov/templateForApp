@@ -16,7 +16,7 @@ import com.example.templateforapp.viewModels.CrimeListViewModel
 import kotlinx.coroutines.launch
 
 
-class CrimeListFragment: Fragment() {
+class CrimeListFragment : Fragment() {
     private val crimeListViewModel: CrimeListViewModel by viewModels()
     private var _binding: FragmentCrimeListBinding? = null
     private val binding
@@ -39,12 +39,16 @@ class CrimeListFragment: Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 crimeListViewModel.crimes.collect { crimes ->
-                    binding.crimeRecyclerView.adapter = CrimeListAdapter(crimes = crimes) { crimeId ->
-                        findNavController()
-                            .navigate(CrimeListFragmentDirections.actionCrimeListFragmentToCrimeDetailFragment(crimeId))
-                    }
+                    binding.crimeRecyclerView.adapter =
+                        CrimeListAdapter(crimes = crimes) { crimeId ->
+                            findNavController()
+                                .navigate(
+                                    CrimeListFragmentDirections.actionCrimeListFragmentToCrimeDetailFragment(
+                                        crimeId
+                                    )
+                                )
+                        }
                 }
-
             }
         }
     }

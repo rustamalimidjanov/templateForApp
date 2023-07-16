@@ -10,7 +10,7 @@ import java.util.UUID
 
 class CrimeHolder(
     private val binding: ListItemCrimeBinding
-): RecyclerView.ViewHolder(binding.root) {
+) : RecyclerView.ViewHolder(binding.root) {
     fun bind(
         crime: Crime,
         onCrimeClicked: (crimeId: UUID) -> Unit
@@ -20,7 +20,7 @@ class CrimeHolder(
         binding.root.setOnClickListener {
             onCrimeClicked(crime.id)
         }
-        binding.crimeSolved.visibility = if(crime.isSolved){
+        binding.crimeSolved.visibility = if (crime.isSolved) {
             View.VISIBLE
         } else {
             View.GONE
@@ -28,10 +28,11 @@ class CrimeHolder(
     }
 
 }
+
 class CrimeListAdapter(
     private val crimes: List<Crime>,
     private val onCrimeClicked: (crimeId: UUID) -> Unit
-): RecyclerView.Adapter<CrimeHolder>() {
+) : RecyclerView.Adapter<CrimeHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CrimeHolder {
         val inflater = LayoutInflater.from(parent.context)
@@ -45,7 +46,6 @@ class CrimeListAdapter(
     }
 
     override fun getItemCount(): Int = crimes.size
-
 
 
 }

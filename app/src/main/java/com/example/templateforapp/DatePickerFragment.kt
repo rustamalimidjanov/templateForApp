@@ -11,14 +11,15 @@ import androidx.navigation.fragment.navArgs
 import java.util.Calendar
 import java.util.GregorianCalendar
 
-class DatePickerFragment: DialogFragment() {
+class DatePickerFragment : DialogFragment() {
     private val args: DatePickerFragmentArgs by navArgs()
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
-        val dateListener = DatePickerDialog.OnDateSetListener { _: DatePicker, years: Int, month: Int, day: Int ->
-            val resultDate = GregorianCalendar(years, month, day).time
-            setFragmentResult(REQUEST_KEY_DATE, bundleOf(BUNDLE_KEY_DATE to resultDate))
-        }
+        val dateListener =
+            DatePickerDialog.OnDateSetListener { _: DatePicker, years: Int, month: Int, day: Int ->
+                val resultDate = GregorianCalendar(years, month, day).time
+                setFragmentResult(REQUEST_KEY_DATE, bundleOf(BUNDLE_KEY_DATE to resultDate))
+            }
         val calendar = Calendar.getInstance()
         calendar.time = args.crimeDate
         val initialYear = calendar.get(Calendar.YEAR)

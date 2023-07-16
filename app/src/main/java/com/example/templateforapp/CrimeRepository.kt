@@ -10,10 +10,11 @@ import kotlinx.coroutines.launch
 import java.util.UUID
 
 private const val DATABASE_NAME = "crime-database"
+
 class CrimeRepository private constructor(
     context: Context,
     private val coroutineScope: CoroutineScope = GlobalScope
-){
+) {
     private val database: CrimeDatabase = Room
         .databaseBuilder(
             context.applicationContext,
@@ -39,8 +40,9 @@ class CrimeRepository private constructor(
                 INSTANCE = CrimeRepository(context)
             }
         }
-        fun get(): CrimeRepository{
-            return INSTANCE?: throw IllegalStateException("CrimeRepository must be initialized")
+
+        fun get(): CrimeRepository {
+            return INSTANCE ?: throw IllegalStateException("CrimeRepository must be initialized")
         }
     }
 }

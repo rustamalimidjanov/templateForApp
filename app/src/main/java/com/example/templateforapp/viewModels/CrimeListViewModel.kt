@@ -9,7 +9,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
-class CrimeListViewModel: ViewModel() {
+class CrimeListViewModel : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     private val _crimes: MutableStateFlow<List<Crime>> = MutableStateFlow(emptyList())
     val crimes: StateFlow<List<Crime>>
@@ -19,7 +19,6 @@ class CrimeListViewModel: ViewModel() {
         viewModelScope.launch {
             crimeRepository.getCrimes().collect() {
                 _crimes.value = it
-                    //test
             }
         }
     }

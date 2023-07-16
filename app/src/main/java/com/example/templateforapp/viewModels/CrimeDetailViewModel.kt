@@ -12,7 +12,7 @@ import java.util.UUID
 
 class CrimeDetailViewModel(
     crimeId: UUID
-): ViewModel() {
+) : ViewModel() {
     private val crimeRepository = CrimeRepository.get()
     private val _crime: MutableStateFlow<Crime?> = MutableStateFlow(null)
     val crime: StateFlow<Crime?> = _crime.asStateFlow()
@@ -33,18 +33,17 @@ class CrimeDetailViewModel(
 
     override fun onCleared() {
         super.onCleared()
-            crime.value?.let {
-                crimeRepository.updateCrime(it)
-            }
+        crime.value?.let {
+            crimeRepository.updateCrime(it)
+        }
     }
-
 
 
 }
 
 class CrimeDetailViewModelFactory(
     private val crimeId: UUID
-): ViewModelProvider.Factory {
+) : ViewModelProvider.Factory {
     override fun <T : ViewModel> create(modelClass: Class<T>): T {
         return CrimeDetailViewModel(crimeId = crimeId) as T
     }

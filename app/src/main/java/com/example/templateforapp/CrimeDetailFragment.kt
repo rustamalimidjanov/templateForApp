@@ -21,7 +21,7 @@ import com.example.templateforapp.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
 import java.util.*
 
-class CrimeDetailFragment: Fragment() {
+class CrimeDetailFragment : Fragment() {
 
     private var _binding: FragmentCrimeDetailBinding? = null
     private val binding
@@ -35,7 +35,11 @@ class CrimeDetailFragment: Fragment() {
     private val callback = object : OnBackPressedCallback(false) {
         override fun handleOnBackPressed() {
             findNavController().navigate(R.id.crimeListFragment)
-            Toast.makeText(requireContext(),"Пожалуйста, заполните поле тайтла",Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "Пожалуйста, заполните поле тайтла",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
@@ -53,7 +57,7 @@ class CrimeDetailFragment: Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         binding.apply {
-            crimeTitle.doOnTextChanged{text, _, _, _ ->
+            crimeTitle.doOnTextChanged { text, _, _, _ ->
                 crimeDetailViewModel.updateCrime { oldCrime ->
                     oldCrime.copy(title = text.toString())
                 }
@@ -82,10 +86,10 @@ class CrimeDetailFragment: Fragment() {
 
         setFragmentResultListener(
             DatePickerFragment.REQUEST_KEY_DATE
-        ) {
-            _, bundle ->
+        ) { _, bundle ->
             val newDate = bundle.getSerializable(DatePickerFragment.BUNDLE_KEY_DATE) as Date
-            crimeDetailViewModel.updateCrime {it.copy(date = newDate)
+            crimeDetailViewModel.updateCrime {
+                it.copy(date = newDate)
             }
         }
 
@@ -106,8 +110,9 @@ class CrimeDetailFragment: Fragment() {
             crimeDate.text = crime.date.toString()
             crimeDate.setOnClickListener {
                 findNavController().navigate(
-                        CrimeDetailFragmentDirections
-                            .actionCrimeDetailFragmentToDatePickerFragment(crime.date))
+                    CrimeDetailFragmentDirections
+                        .actionCrimeDetailFragmentToDatePickerFragment(crime.date)
+                )
             }
             crimeSolved.isChecked = crime.isSolved
 
