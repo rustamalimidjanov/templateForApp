@@ -8,6 +8,7 @@ import androidx.core.os.bundleOf
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.setFragmentResult
 import androidx.navigation.fragment.navArgs
+import java.text.DateFormat
 import java.util.Calendar
 import java.util.GregorianCalendar
 
@@ -20,6 +21,7 @@ class DatePickerFragment : DialogFragment() {
                 val resultDate = GregorianCalendar(years, month, day).time
                 setFragmentResult(REQUEST_KEY_DATE, bundleOf(BUNDLE_KEY_DATE to resultDate))
             }
+
         val calendar = Calendar.getInstance()
         calendar.time = args.crimeDate
         val initialYear = calendar.get(Calendar.YEAR)

@@ -19,6 +19,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.templateforapp.databinding.FragmentCrimeDetailBinding
 import kotlinx.coroutines.launch
+import java.text.DateFormat
 import java.util.*
 
 class CrimeDetailFragment : Fragment() {
@@ -107,7 +108,8 @@ class CrimeDetailFragment : Fragment() {
             if (crimeTitle.text.toString() != crime.title) {
                 crimeTitle.setText(crime.title)
             }
-            crimeDate.text = crime.date.toString()
+            val dateFormat = DateFormat.getDateInstance(DateFormat.LONG).format(crime.date)
+            crimeDate.text = dateFormat
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections
