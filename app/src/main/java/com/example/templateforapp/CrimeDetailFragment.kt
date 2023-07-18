@@ -110,6 +110,7 @@ class CrimeDetailFragment : Fragment() {
             }
             val dateFormat = DateFormat.getDateInstance(DateFormat.LONG).format(crime.date)
             crimeDate.text = dateFormat
+
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections
