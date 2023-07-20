@@ -18,6 +18,7 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.templateforapp.databinding.FragmentCrimeDetailBinding
+import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
 import java.text.DateFormat
 import java.util.*
@@ -94,6 +95,16 @@ class CrimeDetailFragment : Fragment() {
             }
         }
 
+        setFragmentResultListener(
+            TimePickerFragment.REQUEST_KEY_TIME
+        ) {
+            _, bundle ->
+            val newTime = bundle.getSerializable(TimePickerFragment.BUNDLE_KEY_TIME) as Date
+            crimeDetailViewModel.updateCrime {
+                it.copy(date = newTime)
+            }
+        }
+
     }
 
 
@@ -110,11 +121,20 @@ class CrimeDetailFragment : Fragment() {
             }
             val dateFormat = DateFormat.getDateInstance(DateFormat.LONG).format(crime.date)
             crimeDate.text = dateFormat
+            val timeFormat = DateFormat.getTimeInstance(TimeFormat.CLOCK_24H).format(crime.date)
+            crimeTime.text = timeFormat
+
 
             crimeDate.setOnClickListener {
                 findNavController().navigate(
                     CrimeDetailFragmentDirections
                         .actionCrimeDetailFragmentToDatePickerFragment(crime.date)
+                )
+            }
+            crimeTime.setOnClickListener {
+                findNavController().navigate(
+                    CrimeDetailFragmentDirections
+                        .actionCrimeDetailFragmentToTimePickerFragment(crime.date)
                 )
             }
             crimeSolved.isChecked = crime.isSolved
