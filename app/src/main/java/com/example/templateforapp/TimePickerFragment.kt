@@ -32,15 +32,12 @@ class TimePickerFragment : DialogFragment() {
             true
         )
     }
-
     private fun getTimeFromHourAndMinute(hour: Int, minute: Int): Date {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
         return calendar.time
     }
-
-
 
     companion object {
         const val REQUEST_KEY_TIME = "REQUEST_KEY_DATE"
