@@ -2,6 +2,7 @@ package com.example.templateforapp
 
 import android.os.Bundle
 import android.view.*
+import androidx.core.view.isInvisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
@@ -43,6 +44,7 @@ class CrimeListFragment : Fragment() {
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.repeatOnLifecycle(Lifecycle.State.STARTED) {
                 crimeListViewModel.crimes.collect { crimes ->
+                    updateUi(crimes = crimes)
                     binding.crimeRecyclerView.adapter =
                         CrimeListAdapter(crimes = crimes) { crimeId ->
                             findNavController()
@@ -89,6 +91,17 @@ class CrimeListFragment : Fragment() {
             findNavController().navigate(
                 CrimeListFragmentDirections.actionCrimeListFragmentToCrimeDetailFragment(newCrime.id)
             )
+        }
+    }
+    private fun updateUi(crimes: List<Crime>) {
+        binding.newCrimeButton.setOnClickListener {
+            showNewCrime()
+        }
+        if (crimes.isNotEmpty()) {
+            binding.apply {
+                newCrimeButton.visibility = View.INVISIBLE
+                newCrimeTextView.visibility = View.INVISIBLE
+            }
         }
     }
 
