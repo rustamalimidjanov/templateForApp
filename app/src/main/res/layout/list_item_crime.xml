@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
+    android:id="@+id/linearLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:padding="8dp"
-    android:id="@+id/linearLayout">
+    android:background="@drawable/layout_obver"
+    android:orientation="vertical"
+    android:padding="8dp">
 
     <TextView
         android:id="@+id/crime_title"
@@ -14,7 +15,9 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
+        android:fontFamily="sans-serif-medium"
         android:text="@string/crime_title"
+        android:textSize="20sp"
         app:layout_constraintEnd_toStartOf="@+id/crime_solved"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"

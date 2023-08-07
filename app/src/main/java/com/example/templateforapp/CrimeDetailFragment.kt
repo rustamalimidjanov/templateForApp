@@ -34,17 +34,6 @@ class CrimeDetailFragment : Fragment() {
     private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
         CrimeDetailViewModelFactory(args.crimeId)
     }
-    private val callback = object : OnBackPressedCallback(false) {
-        override fun handleOnBackPressed() {
-            findNavController().navigate(R.id.crimeListFragment)
-            Toast.makeText(
-                requireContext(),
-                "Пожалуйста, заполните поле тайтла",
-                Toast.LENGTH_SHORT
-            ).show()
-        }
-    }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -77,7 +66,6 @@ class CrimeDetailFragment : Fragment() {
 
         viewLifecycleOwner.lifecycleScope.launch {
             viewLifecycleOwner.lifecycle.repeatOnLifecycle(Lifecycle.State.STARTED) {
-                requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
                 crimeDetailViewModel.crime.collect { crime ->
                     crime?.let {
                         updateUi(it)
@@ -138,9 +126,6 @@ class CrimeDetailFragment : Fragment() {
             }
             crimeSolved.isChecked = crime.isSolved
 
-            if (crimeTitle.text.toString().isEmpty()) {
-                callback.isEnabled = true
-            }
         }
 
     }
