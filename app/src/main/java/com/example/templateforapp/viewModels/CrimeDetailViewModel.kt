@@ -31,6 +31,13 @@ class CrimeDetailViewModel(
         }
     }
 
+    suspend fun deleteCrime() {
+        _crime.value?.let {
+            crimeRepository.deleteCrime(crime = it)
+        }
+
+    }
+
     override fun onCleared() {
         super.onCleared()
         crime.value?.let {

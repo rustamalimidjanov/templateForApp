@@ -2,9 +2,7 @@ package com.example.templateforapp
 
 import android.os.Bundle
 import android.util.Log
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.Toast
 import androidx.activity.OnBackPressedCallback
 import androidx.activity.OnBackPressedDispatcher
@@ -33,6 +31,11 @@ class CrimeDetailFragment : Fragment() {
     private val args: CrimeDetailFragmentArgs by navArgs()
     private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
         CrimeDetailViewModelFactory(args.crimeId)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setHasOptionsMenu(true)
     }
 
     override fun onCreateView(
@@ -100,6 +103,21 @@ class CrimeDetailFragment : Fragment() {
         _binding = null
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        super.onCreateOptionsMenu(menu, inflater)
+        inflater.inflate(R.menu.fragment_crime_delete, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.delete_crime -> {
+                deleteCrime()
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
+        }
+    }
+
     private fun updateUi(crime: Crime) {
 
         binding.apply {
@@ -130,6 +148,12 @@ class CrimeDetailFragment : Fragment() {
 
     }
 
+    private fun deleteCrime() {
+        viewLifecycleOwner.lifecycleScope.launch {
+            crimeDetailViewModel.deleteCrime()
+            findNavController().navigateUp()
+        }
+    }
 }
 
 
