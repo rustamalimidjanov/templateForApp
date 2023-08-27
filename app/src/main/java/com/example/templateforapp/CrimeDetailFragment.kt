@@ -1,9 +1,15 @@
 package com.example.templateforapp
 
 import android.content.Intent
+import android.content.pm.PackageManager
+import android.content.pm.ResolveInfo
+import android.net.Uri
 import android.os.Bundle
+import android.provider.ContactsContract
 import android.text.format.DateFormat
 import android.view.*
+import androidx.activity.result.contract.ActivityResultContract
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -19,6 +25,7 @@ import java.util.*
 
 private const val DATE_FORMAT = "EEE, MMM, dd"
 private const val TIME_FORMAT = "hh:mm:ss"
+
 class CrimeDetailFragment : Fragment() {
 
     private var _binding: FragmentCrimeDetailBinding? = null
@@ -29,6 +36,14 @@ class CrimeDetailFragment : Fragment() {
     private val args: CrimeDetailFragmentArgs by navArgs()
     private val crimeDetailViewModel: CrimeDetailViewModel by viewModels {
         CrimeDetailViewModelFactory(args.crimeId)
+    }
+    private val selectSuspect = registerForActivityResult(
+        ActivityResultContracts.PickContact()
+    ) { uri: Uri? ->
+        uri?.let {
+            parseContactSelection(it)
+        }
+
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -61,6 +76,16 @@ class CrimeDetailFragment : Fragment() {
                     oldCrime.copy(isSolved = isChecked)
                 }
             }
+
+            crimeSuspect.setOnClickListener {
+                selectSuspect.launch(null)
+            }
+
+            val selectSuspectIntent = selectSuspect.contract.createIntent(
+                requireContext(),
+                null
+            )
+            crimeSuspect.isEnabled = canResolveIntent(intent = selectSuspectIntent)
         }
 
 
@@ -141,7 +166,7 @@ class CrimeDetailFragment : Fragment() {
                 )
             }
             crimeSolved.isChecked = crime.isSolved
-            crimeReport.setOnClickListener{
+            crimeReport.setOnClickListener {
                 val reportIntent = Intent(Intent.ACTION_SEND).apply {
                     type = "text/plain"
                     putExtra(Intent.EXTRA_TEXT, getCrimeReport(crime = crime))
@@ -151,6 +176,9 @@ class CrimeDetailFragment : Fragment() {
                     getString(R.string.send_report)
                 )
                 startActivity(chooserIntent)
+            }
+            crimeSuspect.text = crime.suspect.ifEmpty {
+                getString(R.string.crime_report_no_suspect)
             }
 
         }
@@ -171,13 +199,36 @@ class CrimeDetailFragment : Fragment() {
             getString(R.string.crime_report_unsolved)
         }
         val dateSting = DateFormat.format(DATE_FORMAT, crime.date).toString()
-        val suspectText = if(crime.suspect.isBlank()) {
+        val suspectText = if (crime.suspect.isBlank()) {
             getString(R.string.crime_report_no_suspect)
         } else {
             getString(R.string.crime_report_suspect, crime.suspect)
         }
         return getString(R.string.crime_report, crime.title, dateSting, solvedString, suspectText)
 
+    }
+
+    private fun parseContactSelection(contactUri: Uri) {
+        val queryField = arrayOf(ContactsContract.Contacts.DISPLAY_NAME)
+        val queryCursor =
+            requireActivity().contentResolver.query(contactUri, queryField, null, null, null)
+        queryCursor?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val suspect = cursor.getString(0)
+                crimeDetailViewModel.updateCrime {
+                    it.copy(suspect = suspect)
+                }
+            }
+        }
+    }
+
+    private fun canResolveIntent(intent: Intent): Boolean {
+        val packageManager: PackageManager = requireActivity().packageManager
+        val resolvedActivity: ResolveInfo? = packageManager.resolveActivity(
+            intent,
+            PackageManager.MATCH_DEFAULT_ONLY
+        )
+        return resolvedActivity != null
     }
 }
 
