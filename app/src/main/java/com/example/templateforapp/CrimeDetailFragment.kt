@@ -1,11 +1,9 @@
 package com.example.templateforapp
 
+import android.content.Intent
 import android.os.Bundle
-import android.util.Log
+import android.text.format.DateFormat
 import android.view.*
-import android.widget.Toast
-import androidx.activity.OnBackPressedCallback
-import androidx.activity.OnBackPressedDispatcher
 import androidx.core.widget.doOnTextChanged
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.setFragmentResultListener
@@ -16,11 +14,11 @@ import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import com.example.templateforapp.databinding.FragmentCrimeDetailBinding
-import com.google.android.material.timepicker.TimeFormat
 import kotlinx.coroutines.launch
-import java.text.DateFormat
 import java.util.*
 
+private const val DATE_FORMAT = "EEE, MMM, dd"
+private const val TIME_FORMAT = "hh:mm:ss"
 class CrimeDetailFragment : Fragment() {
 
     private var _binding: FragmentCrimeDetailBinding? = null
@@ -124,9 +122,9 @@ class CrimeDetailFragment : Fragment() {
             if (crimeTitle.text.toString() != crime.title) {
                 crimeTitle.setText(crime.title)
             }
-            val dateFormat = DateFormat.getDateInstance(DateFormat.LONG).format(crime.date)
+            val dateFormat = DateFormat.format(DATE_FORMAT, crime.date)
             crimeDate.text = dateFormat
-            val timeFormat = DateFormat.getTimeInstance(TimeFormat.CLOCK_24H).format(crime.date)
+            val timeFormat = DateFormat.format(TIME_FORMAT, crime.date)
             crimeTime.text = timeFormat
 
 
@@ -143,6 +141,17 @@ class CrimeDetailFragment : Fragment() {
                 )
             }
             crimeSolved.isChecked = crime.isSolved
+            crimeReport.setOnClickListener{
+                val reportIntent = Intent(Intent.ACTION_SEND).apply {
+                    type = "text/plain"
+                    putExtra(Intent.EXTRA_TEXT, getCrimeReport(crime = crime))
+                }
+                val chooserIntent = Intent.createChooser(
+                    reportIntent,
+                    getString(R.string.send_report)
+                )
+                startActivity(chooserIntent)
+            }
 
         }
 
@@ -153,6 +162,22 @@ class CrimeDetailFragment : Fragment() {
             crimeDetailViewModel.deleteCrime()
             findNavController().navigateUp()
         }
+    }
+
+    private fun getCrimeReport(crime: Crime): String {
+        val solvedString = if (crime.isSolved) {
+            getString(R.string.crime_report_solved)
+        } else {
+            getString(R.string.crime_report_unsolved)
+        }
+        val dateSting = DateFormat.format(DATE_FORMAT, crime.date).toString()
+        val suspectText = if(crime.suspect.isBlank()) {
+            getString(R.string.crime_report_no_suspect)
+        } else {
+            getString(R.string.crime_report_suspect, crime.suspect)
+        }
+        return getString(R.string.crime_report, crime.title, dateSting, solvedString, suspectText)
+
     }
 }
 
