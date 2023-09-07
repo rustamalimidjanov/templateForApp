@@ -26,4 +26,6 @@
     <string name="crime_report_photo">Send photo</string>
     <string name="select_time">select time</string>
     <string name="delete_crime">Delete</string>
+    <string name="send_number">CALL SUSPEND</string>
+    <string name="give_number">GIVE SUSPEND NUMBER</string>
 </resources>

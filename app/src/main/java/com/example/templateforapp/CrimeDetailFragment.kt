@@ -1,5 +1,6 @@
 package com.example.templateforapp
 
+import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.ResolveInfo
@@ -43,8 +44,16 @@ class CrimeDetailFragment : Fragment() {
         uri?.let {
             parseContactSelection(it)
         }
-
     }
+
+    private val selectContact = registerForActivityResult(
+        ActivityResultContracts.PickContact()
+    ) { uri: Uri? ->
+        uri?.let {
+            parseNumberSelection(it)
+        }
+    }
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -86,7 +95,24 @@ class CrimeDetailFragment : Fragment() {
                 null
             )
             crimeSuspect.isEnabled = canResolveIntent(intent = selectSuspectIntent)
+
+            crimeCallNumber.setOnClickListener {
+                selectContact.launch(null)
+
+            }
+            val selectContactIntent = selectContact.contract.createIntent(
+                requireContext(),
+                null
+            )
+            crimeCallNumber.isEnabled = canResolveIntent(intent = selectContactIntent)
+
+            crimeSetNumber.setOnClickListener {
+                val dialUri = Uri.parse("tel: 555555")
+                val dialIntent = Intent(Intent.ACTION_DIAL, dialUri)
+                startActivity(dialIntent)
+            }
         }
+
 
 
 
@@ -180,6 +206,7 @@ class CrimeDetailFragment : Fragment() {
             crimeSuspect.text = crime.suspect.ifEmpty {
                 getString(R.string.crime_report_no_suspect)
             }
+            crimeCallNumber.text = crime.suspect
 
         }
 
@@ -222,6 +249,44 @@ class CrimeDetailFragment : Fragment() {
         }
     }
 
+    private fun parseNumberSelection(contactUri: Uri) {
+        val queryField = arrayOf(ContactsContract.Contacts._ID)
+
+        val queryCursor = requireActivity().contentResolver.query(
+            contactUri,
+            queryField,
+            null,
+            null,
+            null
+        )
+        queryCursor?.use { cursor ->
+            if (cursor.moveToFirst()) {
+                val contactNumber = cursor.getString(0)
+                val phoneURI = ContactsContract.CommonDataKinds.Phone.CONTENT_URI
+                val phoneNumberQueryFields = arrayOf(ContactsContract.CommonDataKinds.Phone.NUMBER)
+                val phoneWhereClause = "${ContactsContract.CommonDataKinds.Phone.CONTACT_ID} = ?"
+                val phoneQueryParameters = arrayOf(contactNumber)
+                val phoneCursor = requireActivity().contentResolver
+                    .query(
+                        phoneURI,
+                        phoneNumberQueryFields,
+                        phoneWhereClause,
+                        phoneQueryParameters,
+                        null
+                    )
+                phoneCursor?.use { cursorPhone ->
+                    cursorPhone.moveToFirst()
+                    val phoneNumValue = cursorPhone.getString(0)
+                    crimeDetailViewModel.updateCrime {
+                        it.copy(suspect = phoneNumValue)
+                    }
+
+                }
+            }
+
+        }
+    }
+
     private fun canResolveIntent(intent: Intent): Boolean {
         val packageManager: PackageManager = requireActivity().packageManager
         val resolvedActivity: ResolveInfo? = packageManager.resolveActivity(
@@ -230,6 +295,7 @@ class CrimeDetailFragment : Fragment() {
         )
         return resolvedActivity != null
     }
+
 }
 
 
